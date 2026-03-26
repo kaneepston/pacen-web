@@ -423,3 +423,92 @@
 .send-button:not(:disabled):hover { color: #7A98A5; }
 .send-button:active { transform: scale(0.9); }
 .send-button:disabled { cursor: default; }
+
+/* ── Input icons (attach + mic, shown when input is empty) */
+.input-icons {
+  position: absolute;
+  right: 16px;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+.input-icon-btn {
+  width: 34px; height: 34px;
+  background: none;
+  border: none;
+  cursor: default;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(122, 152, 165, 0.4);
+  padding: 0;
+}
+
+/* ── Sleep widget ──────────────────────────────────────── */
+.sleep-card-row { margin-top: 4px; width: 90%; }
+.sleep-card {
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 0.5px solid rgba(255, 255, 255, 0.4);
+  border-radius: 24px;
+  padding: 20px;
+}
+.sleep-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+.sleep-card-title {
+  font-size: 14px; font-weight: 500;
+  color: rgba(24, 28, 34, 0.8); margin: 0;
+}
+.sleep-card-meta {
+  font-size: 11px; color: rgba(122, 152, 165, 0.6);
+  margin: 2px 0 0;
+}
+.sleep-score-badge {
+  display: flex; flex-direction: column; align-items: center;
+  background: rgba(99, 102, 241, 0.07);
+  border-radius: 12px; padding: 6px 10px;
+}
+.sleep-score-num {
+  font-size: 20px; font-weight: 300;
+  color: rgba(99, 102, 241, 0.85); letter-spacing: -0.5px; line-height: 1;
+}
+.sleep-score-label {
+  font-size: 9px; font-weight: 500;
+  color: rgba(99, 102, 241, 0.45); letter-spacing: 0.6px;
+  margin-top: 2px;
+}
+.sleep-total {
+  font-size: 32px; font-weight: 300;
+  color: rgba(24, 28, 34, 0.85); letter-spacing: -1px;
+  margin: 0 0 14px;
+}
+.sleep-total-unit {
+  font-size: 16px; font-weight: 300; color: rgba(24, 28, 34, 0.4);
+}
+.sleep-bar-track {
+  display: flex; height: 6px; border-radius: 3px;
+  overflow: hidden; margin-bottom: 16px;
+}
+.sleep-bar-seg { height: 6px; }
+.sleep-legend {
+  display: flex; justify-content: space-between;
+}
+.sleep-legend-item {
+  display: flex; flex-direction: column; align-items: center; flex: 1;
+}
+.sleep-legend-dot {
+  width: 6px; height: 6px; border-radius: 50%; margin-bottom: 4px;
+}
+.sleep-legend-label {
+  font-size: 9px; font-weight: 500;
+  color: rgba(122, 152, 165, 0.5); letter-spacing: 0.5px;
+  text-transform: uppercase; margin-bottom: 2px;
+}
+.sleep-legend-value {
+  font-size: 12px; font-weight: 300; color: rgba(24, 28, 34, 0.7);
+}

@@ -101,9 +101,49 @@ function HeartRateWidget() {
   );
 }
 
+function SleepWidget() {
+  const stages = [
+    { label: 'Deep',  value: '1h 48m', pct: 25, color: 'rgba(99,102,241,0.85)'  },
+    { label: 'REM',   value: '1h 30m', pct: 21, color: 'rgba(139,92,246,0.75)'  },
+    { label: 'Light', value: '3h 55m', pct: 54, color: 'rgba(196,181,253,0.95)' },
+  ];
+  return (
+    <div className="ai-bubble-wrapper sleep-card-row">
+      <div className="sleep-card">
+        <div className="sleep-header-row">
+          <div>
+            <p className="sleep-card-title">Last Night</p>
+            <p className="sleep-card-meta">11:45 PM — 6:58 AM</p>
+          </div>
+          <div className="sleep-score-badge">
+            <span className="sleep-score-num">82</span>
+            <span className="sleep-score-label">SCORE</span>
+          </div>
+        </div>
+        <p className="sleep-total">7<span className="sleep-total-unit">h </span>13<span className="sleep-total-unit">m</span></p>
+        <div className="sleep-bar-track">
+          {stages.map(s => (
+            <div key={s.label} className="sleep-bar-seg" style={{ flex: s.pct, backgroundColor: s.color }} />
+          ))}
+        </div>
+        <div className="sleep-legend">
+          {stages.map(s => (
+            <div key={s.label} className="sleep-legend-item">
+              <div className="sleep-legend-dot" style={{ backgroundColor: s.color }} />
+              <span className="sleep-legend-label">{s.label}</span>
+              <span className="sleep-legend-value">{s.value}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function MsgBubble({ msg, onConnect, onSkip }) {
-  if (msg.role === 'widget')      return <HeartRateWidget />;
-  if (msg.role === 'health-card') return <HealthCard onConnect={onConnect} onSkip={onSkip} />;
+  if (msg.role === 'widget')       return <HeartRateWidget />;
+  if (msg.role === 'sleep-widget') return <SleepWidget />;
+  if (msg.role === 'health-card')  return <HealthCard onConnect={onConnect} onSkip={onSkip} />;
   if (msg.role === 'ai') return (
     <div className="ai-bubble-wrapper message-enter">
       <div className="glow-wrap">
@@ -237,9 +277,17 @@ export default function App() {
         () => setTimeout(() => addMsg('health-card'), 500)
       );
     } else if (step === 'chat' || step === 'connected') {
-      const reply = GENERIC_REPLIES[replyIndex % GENERIC_REPLIES.length](userName);
-      setReplyIndex(i => i + 1);
-      pacenSays(reply);
+      if (/\bsleep\b/i.test(text)) {
+        pacenSays(
+          `Here's a breakdown of your sleep data from last night. Your score of 82 shows good recovery — strong REM and deep cycles.`,
+          1300,
+          () => addMsg('sleep-widget')
+        );
+      } else {
+        const reply = GENERIC_REPLIES[replyIndex % GENERIC_REPLIES.length](userName);
+        setReplyIndex(i => i + 1);
+        pacenSays(reply);
+      }
     } else {
       pacenSays(`I'm here to help, ${userName}. Once we set up your health data sync, I can provide much more personalised insights.`);
     }
@@ -280,11 +328,22 @@ export default function App() {
                   onKeyDown={e => e.key === 'Enter' && handleSend()}
                   disabled={isTyping}
                 />
-                <button
-                  className={`send-button${input.trim() ? ' send-button--active' : ''}`}
-                  onClick={handleSend}
-                  disabled={isTyping || !input.trim()}
-                >↑</button>
+                {input.trim() ? (
+                  <button
+                    className="send-button send-button--active"
+                    onClick={handleSend}
+                    disabled={isTyping}
+                  >↑</button>
+                ) : (
+                  <div className="input-icons">
+                    <button className="input-icon-btn" disabled aria-label="Attach">
+                      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg>
+                    </button>
+                    <button className="input-icon-btn" disabled aria-label="Microphone">
+                      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10v2a7 7 0 0014 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="8" y1="22" x2="16" y2="22"/></svg>
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
           </div>
